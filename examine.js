@@ -17,4 +17,12 @@ export default class examine extends HTTP {
 		})
 	}
 	
+	
+	getNotPass (id) {
+		 return this.request({
+			url: `/examine/getNotPass?userId=${id}`,
+			method: 'GET',
+		})
+	}
+	
 } 

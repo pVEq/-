@@ -41,5 +41,11 @@ export default class login extends HTTP {
 			data
 		})
 	}
+	getUserInfo (id) {
+		return this.request({
+			url: `/user/getUserInfo/${id}`,
+			method: 'get',
+		})
+	}
 	
 } 
