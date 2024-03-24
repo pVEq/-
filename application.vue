@@ -27,9 +27,6 @@
 				<u-form-item label="名称" label-position=top>
 					<u-input placeholder="请输入" v-model="form.name" />
 				</u-form-item>
-				<u-form-item label="分数" label-position=top>
-					<u-input placeholder="请输入" v-model="form.score" />
-				</u-form-item>
 				
 				
 				<u-form-item labelWidth="160" label="佐证"  prop="cardImg"> 
@@ -98,7 +95,7 @@
 					{
 						value: '4',
 						label: '国家级'
-					}
+					} 
 				],
 				list2: [
 					{
@@ -125,6 +122,10 @@
 					{
 						value: '6',
 						label: '劳动教育'
+					},
+					{
+						value: '7',
+						label: '扣分项目'
 					}
 					
 					
