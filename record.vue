@@ -1,103 +1,114 @@
 <template>
-	<view>
-		<!-- <u-tabs :list="list" :is-scroll="false" :current="current" @change="change"></u-tabs> -->
-		<view class="box" @click="xiangqing()">
-			<view class="flex">
-				<view class="userName">
-					王国庆提交的用车申请
-				</view>
-				<view class="time">
-					2022.02.02
-				</view>
-			</view>
-			<view class="tet">
-				用车时间：2022-03-08 16：08
-			</view>
-			<view class="tet">
-				返回时间：2022-03-09 16：08
-			</view>
-			<view class="tet">
-				往返行程：新闻大厦-消防
-			</view>
-			<view class="flex">
-				<view class="approver">
-					由王国庆提交
-				</view>
-				<view class="backout">
-					审核通过
-				</view>
-			</view>
-		</view>
-
-	</view>
+  <view class="container">
+    <div class="messages">
+      <p v-for="(message, index) in messages" :key="index">{{ message }}</p>
+    </div>
+    <u-tabbar v-model="current" :list="list" :before-switch="beforeSwitch"></u-tabbar>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				// list: [{
-				// 	name: '发起提交'
-				// }, {
-				// 	name: '查看数据'
-				// }],
-				// current: 1,
-			}
-		},
-		methods: {
-			// change(index) {
-			// 	if (index == 0) {
-			// 		uni.reLaunch({
-			// 			url: 'application'
-			// 		});
-			// 	}
-
-			// },
-		}
-	}
+import checkin from "@/api/checkin.js";
+const checkInApi = new checkin();
+export default {
+  data() {
+    return {
+      messages: [
+        '院级：',
+        '思想引领 + 1',
+        '1.学期内马原/习近平新时代思想/毛概/思修得分85以上',
+        '专业技能 + 1',
+        '文体活动 + 1',
+        '社会工作和志愿服务 + 1',
+        '创新能力 + 1',
+        '日常表现综合评价 + 1',
+        '劳动教育 + 1',
+        '扣分项目 - 1',
+        '校级：',
+        '思想引领 + 2',
+        '专业技能 + 2',
+        '文体活动 + 2',
+        '社会工作和志愿服务 + 2',
+        '创新能力 + 2',
+        '日常表现综合评价 + 2',
+        '劳动教育 + 2',
+        '扣分项目 - 2',
+        '省级：',
+        '思想引领 + 3',
+        '专业技能 + 3',
+        '文体活动 + 3',
+        '社会工作和志愿服务 + 3',
+        '创新能力 + 3',
+        '日常表现综合评价 + 3',
+        '劳动教育 + 3',
+        '扣分项目 - 3',
+        '国家级：',
+        '思想引领 + 4',
+        '专业技能 + 4',
+        '文体活动 + 4',
+        '社会工作和志愿服务 + 4',
+        '创新能力 + 4',
+        '日常表现综合评价 + 4',
+        '劳动教育 + 4',
+        '扣分项目 - 4'
+      ],
+      // tab
+      list: [
+        { iconPath: "home", selectedIconPath: "home-fill", text: '计算方式', customIcon: false },
+        { iconPath: "photo", selectedIconPath: "photo-fill", text: '得分规则', customIcon: false }
+      ],
+      current: 1,
+      recordList: [],
+      emp: false
+    };
+  },
+  methods: {
+    beforeSwitch(index) {
+      if (index === 0) {
+        uni.reLaunch({ url: 'index' });
+      }
+    },
+    async record() {
+      try {
+        const res = await checkInApi.workflow();
+        if (res.code === 200) {
+          this.recordList = res.data;
+        } else if (res.data === []) {
+          this.emp = true;
+        } else {
+          console.log('网络连接失败');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  },
+  onShow() {
+    this.record();
+  }
+};
 </script>
 
-<style>
-	.box {
-		background-color: #fefefe;
-		padding: 35rpx 25rpx;
-		border-bottom: 1px solid #ededed;
-	}
+<style scoped>
+.container {
+  background-color: #f8f8f8;
+}
 
-	.userName {
-		font-size: 32rpx;
-		color: #272729;
-		margin-bottom: 12rpx;
-	}
+.messages {
+  background-color: #fefefe;
+  padding: 35rpx 25rpx;
+  border-bottom: 1px solid #ededed;
+}
 
-	.time {
-		font-size: 18rpx;
-		color: #949494;
-		line-height: 50rpx;
-	}
+.messages p {
+  font-size: 22rpx;
+  color: #272729;
+  margin-bottom: 12rpx;
+}
 
-	.tet {
-		font-size: 22rpx;
-		color: #949494;
-		margin-bottom: 12rpx;
-	}
-
-	.approver {
-		font-size: 25rpx;
-		color: #292929;
-	}
-
-	.backout {
-		font-size: 25rpx;
-		color: #3186ac;
-	}
-
-	.flex {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.u-tabs-scorll-flex.data-v-3b2b1a80 {
-		border-bottom: 5rpx solid #F6f6f6;
-	}
+.u-tabbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
 </style>
